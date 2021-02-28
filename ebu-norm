@@ -10,7 +10,7 @@ then
   shift
   echo "Please enter a value (-12 or lower) if using the -t flag"
   exit
-elif [ "$1" = "-t" ] && [ "$2" -ge -12 ]
+elif [ "$1" = "-t" ] && [ "$2" -gt -12 ]
   then
   echo "Please enter an integrated value -12 or lower"
   exit	
@@ -54,7 +54,7 @@ do
 
 	# The following SoX compand values are based on numbers in mhartzel's FreeLCS project 
 	# https://github.com/mhartzel/freelcs/blob/master/LoudnessCorrection.py
-	LIMITER_LEVEL=$(echo $INT_VALUE "-" $TARGET "+ -2"| bc )
+	LIMITER_LEVEL=$(echo $INT_VALUE "-" $TARGET "+ -1" | bc )
 	L3=$(echo $LIMITER_LEVEL "+ -3" | bc ) 
 	L2=$(echo $LIMITER_LEVEL "+ -2" | bc ) 
 	L1=$(echo $LIMITER_LEVEL "+ -1" | bc ) 
@@ -71,15 +71,17 @@ do
 	sox "$TEMPDIR/audioin.$EXT" "$TEMPDIR/audioout.$EXT" $LIMITER
 
 	# Second analysis pass
-	ebur128 --full --lufs "$TEMPDIR/audioout.$EXT" > "$TEMPDIR/la.txt"
-	INT_VALUE=$(awk '/loud/ {print $3}' "$TEMPDIR/la.txt") 
+	ebur128 --full --lufs "$TEMPDIR/audioout.$EXT" > "$TEMPDIR/la-2ndpass.txt"
+	INT_VALUE=$(awk '/loud/ {print $3}' "$TEMPDIR/la-2ndpass.txt") 
+	PEAK_VALUE2=$(awk '/Peak/ {print $3}' "$TEMPDIR/la-2ndpass.txt")
 	GAIN=$(echo $TARGET "-" $INT_VALUE | bc )
+	PEAKR=$(echo $PEAK_VALUE "-" $PEAK_VALUE2 | bc )
 
 	# Apply gain after limiting
 	sox "$TEMPDIR/audioout.$EXT" "$dirname/ebu-norm/$FNAME-ebu-norm.$EXT" gain $GAIN
 	echo	
 	echo $file
-	echo "$GAIN dB applied with limiting..."
+	echo "$GAIN dB applied with $PEAKR dB of peak limiting..."
   else
 	# Apply basic gain without limiting
 	sox "$file" "$dirname/ebu-norm/$FNAME-ebu-norm.$EXT" gain $GAIN
