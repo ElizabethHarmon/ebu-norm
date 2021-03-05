@@ -1,4 +1,4 @@
-# ebu-norm | tp-norm | loudmax-norm
+# ebu-norm | tp-norm | loudmax-norm | lsp-norm
 Scripts to batch normalize files to integrated or true peak targets
 
 Prerequisites: `ebur128`, `sox`
@@ -12,7 +12,7 @@ Files are analyzed by `ebur128` with the required gain passed to `SoX`.
 In the case of `ebu-norm`, this takes place post-limiting to ensure that the exact integrated value is reached.
 Files are written to a sub-folder with suffix added to filename.
 
-N.B. `loudmax-norm` is ebu-norm but using Loudmax as the sole limiter instead of the compand chain. A major benefit is being able to get very close to, or precisely hit, -1 dBTP. It probably goes without saying that `loudmax-norm` requires Loudmax LADSPA be installed in `/usr/lib/ladspa`. A user-friendly LMO varible near top of the script is to allow for the more transparent / less aggressive Loudmax limiting algorithm. Essentially, if you find you have true peak overage with problematic files, try setting LMO to -1.2 or even -1.5.
+N.B. `loudmax-norm` and `lsp-norm` are essentially `ebu-norm` but using Loudmax or LSP limiter respectively as the sole limiter instead of the compand chain. A major benefit is being able to get very close to, or precisely hit, -1 dBTP. It probably goes without saying that `loudmax-norm` and `lsp-norm` require Loudmax and LSP Plugins LADSPA to be installed in `/usr/lib/ladspa`. A user-friendly varible near top of each script is present to allow for the more transparent / less aggressive Loudmax or LSP limiting algorithms. Essentially, if you find you have true peak overage with problematic files, try setting the variables to -1.2 or even -1.5.
 
 ### Usage: 
 ```shell
