@@ -14,6 +14,8 @@ Files are written to a sub-folder with suffix added to filename.
 
 N.B. `loudmax-norm` and `lsp-norm` are essentially `ebu-norm` but using Loudmax or LSP limiter respectively as the sole limiter instead of the compand chain. A major benefit is being able to get very close to, or precisely hit, -1 dBTP. It probably goes without saying that `loudmax-norm` and `lsp-norm` require Loudmax and LSP Plugins LADSPA to be installed in `/usr/lib/ladspa`. A user-friendly varible near top of each script is present to allow for the more transparent / less aggressive Loudmax or LSP limiting algorithms. Essentially, if you find you have true peak overage with problematic files, try setting the variables to -1.2 or even -1.5.
 
+With all these scripts, limiting, true peak or otherwise, is no substitute for correctly mastered files in terms of dynamics. If you find yourself applying more than a couple of dB of peak limiting, perhaps it is a sign to return to the original file and re-mix/master.
+
 ### Usage: 
 ```shell
 ebu-norm [-t target_value] infiles
